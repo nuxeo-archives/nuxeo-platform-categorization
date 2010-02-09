@@ -30,9 +30,9 @@ Download the source::
 
   $ hg clone https://hg.nuxeo.org/addons/nuxeo-platform-categorization
   $ cd nuxeo-platform-categorization
-  $ hg clone https://hg.nuxeo.org/addons/nuxeo-platform-categorization-subjects
-  $ hg clone https://hg.nuxeo.org/addons/nuxeo-platform-categorization-coverage
-  $ hg clone https://hg.nuxeo.org/addons/nuxeo-platform-categorization-language
+  $ hg clone https://hg.nuxeo.org/addons/nuxeo-platform-categorization/nuxeo-platform-categorization-subjects
+  $ hg clone https://hg.nuxeo.org/addons/nuxeo-platform-categorization/nuxeo-platform-categorization-coverage
+  $ hg clone https://hg.nuxeo.org/addons/nuxeo-platform-categorization/nuxeo-platform-categorization-language
 
 The models are hold in their own mercural repositories in subfolders so as to
 avoid polluting the history of the service package with large blobs that can
