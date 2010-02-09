@@ -376,7 +376,29 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
             ClassNotFoundException {
         GZIPInputStream gzIn = new GZIPInputStream(in);
         ObjectInputStream objIn = new ObjectInputStream(gzIn);
-        return (TfIdfCategorizer) objIn.readObject();
+        TfIdfCategorizer cat = (TfIdfCategorizer) objIn.readObject();
+        log.info(String.format(
+                "Sucessfully loaded model with %d topics, dimension %d and density %f",
+                cat.getTopicNames().size(), cat.getDimension(),
+                cat.getDensity()));
+        return cat;
+    }
+
+    public double getDensity() {
+        long sum = 0;
+        for (Object singleTopicTermCount : topicTermCount.values()) {
+            for (long c : (long[]) singleTopicTermCount) {
+                sum += c != 0L ? 1 : 0;
+            }
+        }
+        for (long c : allTermCounts) {
+            sum += c != 0 ? 1 : 0;
+        }
+        return ((double) sum) / ((topicNames.size() + 1) * getDimension());
+    }
+
+    public Set<String> getTopicNames() {
+        return topicNames;
     }
 
     /**
