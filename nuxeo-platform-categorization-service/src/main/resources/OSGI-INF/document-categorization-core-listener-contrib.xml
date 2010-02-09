@@ -8,7 +8,7 @@
       and launch all registered document categorizers.
     </documentation>
 
-    <listener name="categorizationSyncListener" async="false" postCommit="false"
+    <listener name="documentCategorizationSyncListener" async="false" postCommit="false"
       class="org.nuxeo.ecm.platform.categorization.listener.DocumentCategorizationSyncListener"
       priority="50">
       <event>aboutToCreate</event>
@@ -16,7 +16,7 @@
     </listener>
 
     <!-- disabled to workaround what looks like a cache invalidation problem
-    <listener name="categorizationAsyncListener" async="true" postCommit="true"
+    <listener name="documentCategorizationAsyncListener" async="true" postCommit="true"
       class="org.nuxeo.ecm.platform.categorization.listener.DocumentCategorizationAsyncListener"
       priority="501"/>
     -->

@@ -115,7 +115,7 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         openSession();
     }
 
-    public void testLanguageCategorizationUsingDefaultEventListener()
+    public void testDefaultCategorizationUsingDefaultEventListener()
             throws Exception {
         // let us create some documents
         makeSomeDocuments();
@@ -144,7 +144,7 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         assertEquals(null, note1.getPropertyValue("dc:language"));
     }
 
-    public void testLanguageCategorizationUsingServiceAPI() throws Exception {
+    public void testDefaultCategorizationUsingServiceAPI() throws Exception {
         // disable the document categorization core event listener
         EventServiceAdmin eventServiceAdmin = Framework.getService(EventServiceAdmin.class);
         eventServiceAdmin.setListenerEnabledFlag(
