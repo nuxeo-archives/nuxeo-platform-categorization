@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.ecm.platform.categorization.service.DocumentCategorizationService">
+
+  <implementation
+    class="org.nuxeo.ecm.platform.categorization.service.DocumentCategorizationServiceImpl" />
+
+  <service>
+    <provide interface="org.nuxeo.ecm.platform.categorization.service.DocumentCategorizationService" />
+  </service>
+
+  <documentation>
+    The DocumentCategorizationService service provides a generic way to launch categorizers that use the
+    textual content of document to suggest values for categorical fields.
+  </documentation>
+
+  <extension-point name="categorizers">
+    <documentation>
+      The service accepts the registration of parameterized categorizer implementations:
+
+      <code>
+        <categorizer name="language" property="dc:language"
+          factory="org.nuxeo.ecm.platform.categorization.categorizer.LanguageCategorizerFactory"
+          enabled="true" extractTextFromBinaryAttachments="true" minTextLength="100"
+          precisionThreshold="0.8">
+          <skip>
+            <facet name="Folderish" />
+          </skip>
+          <mapping>
+            <outcome name="german">de</outcome>
+            <outcome name="english">en</outcome>
+            <outcome name="french">fr</outcome>
+          </mapping>
+        </categorizer>
+      </code>
+
+      The optional attribute 'maxSuggestions' is only useful to bound the number of
+      suggestions for multi-valued fields.
+
+      The optional attribute 'precisionThreshold' allow the system administrator to
+      trade recall for precision by choosing not to categorize a document if the
+      underlying categorizer implementation does not show enough confidence. The
+      range of accepted values is implementation dependant. 
+
+      The attribute 'minTextLength' tells the categorizer to guess provided text
+      content length (in characters) is superior to the provided threshold.
+      Categorizers tend to perform poorly on really small documents.
+
+      The textfield tags tell the list of xs:string or nxs:stringList document
+      properties to use for document classification.
+    </documentation>
+
+    <object class="org.nuxeo.ecm.platform.categorization.service.CategorizerDescriptor" />
+  </extension-point>
+
+</component>

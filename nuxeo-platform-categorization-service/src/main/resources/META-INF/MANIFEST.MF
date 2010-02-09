@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Nuxeo Platform Document Categorization
+Bundle-SymbolicName: org.nuxeo.ecm.platform.categorization.service
+Bundle-Localization: plugin
+Bundle-Vendor: Nuxeo
+Bundle-Category: runtime
+Require-Bundle: org.nuxeo.ecm.core.api
+Nuxeo-Component: OSGI-INF/document-categorization-framework.xml,
+ OSGI-INF/document-categorization-core-listener-contrib.xml
