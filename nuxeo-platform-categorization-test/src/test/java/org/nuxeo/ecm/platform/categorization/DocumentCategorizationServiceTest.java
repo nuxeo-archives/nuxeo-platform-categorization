@@ -79,10 +79,15 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         // create sub folder contents
         file1 = session.createDocumentModel(f1.getPathAsString(), "file-1",
                 "File");
-        file1.setPropertyValue("dc:title", "File 1");
+        file1.setPropertyValue("dc:title", "File 1: My trip to Asia");
         Blob b1 = StreamingBlob.createFromString(
-                "Last month I went on a trip around Asia and visited Saigon, "
-                        + "Hanoi, several buddhist monasteries.", "text/plain");
+                "Last month, I took the plane for a trip around Asia and visited Saigon, "
+                        + "Hanoi and several buddhist monasteries on the way. To move arounds"
+                        + " we mainly used the railroads and buses. Traveling by train"
+                        + " was an amazing experience. Unfortunately most hotels were"
+                        + " overcrowded with tourists and we had to go backpacking to find"
+                        + " quiet beaches away from the luxury resorts around Phu Quoc Island"
+                        + " and Nha Trang.", "text/plain");
         b1.setEncoding("UTF-8");
         b1.setFilename("file-1.txt");
         file1.setPropertyValue("file:content", (Serializable) b1);
@@ -136,6 +141,9 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
 
         assertEquals("en", file1.getPropertyValue("dc:language"));
         assertEquals("asia/Viet_Nam", file1.getPropertyValue("dc:coverage"));
+        assertEquals(Arrays.asList("human sciences/history",
+                "daily life/tourism"),
+                Arrays.asList((String[]) file1.getPropertyValue("dc:subjects")));
 
         assertEquals("fr", file2.getPropertyValue("dc:language"));
         assertEquals("europe/France", file2.getPropertyValue("dc:coverage"));
@@ -216,7 +224,8 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         assertEquals(null, file2.getPropertyValue("dc:language"));
         assertEquals("europe/France", file2.getPropertyValue("dc:coverage"));
 
-        file2.setPropertyValue("dc:title", "Ceci est le nouveau titre pour le fichier 2");
+        file2.setPropertyValue("dc:title",
+                "Ceci est le nouveau titre pour le fichier 2");
         file2 = session.saveDocument(file2);
 
         assertEquals("en", file1.getPropertyValue("dc:language"));
