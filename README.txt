@@ -38,9 +38,9 @@ The models are hold in their own mercural repositories in subfolders so as to
 avoid polluting the history of the service package with large blobs that can
 take a long time to download.
 
-Download dependencies and build the jars::
+Download dependencies and build the jars (in each repo)::
 
-  $ mvn install
+  $ mvn install -Dmaven.test.skip=true
 
 Copy the resulting jars from the "target" sub-folders into the ``bundles`` or
 ``plugins`` folder of your tomcat-based or jboss-based Nuxeo application and
