@@ -16,7 +16,7 @@ public class TfIdfCategorizerFactory implements CategorizerFactory {
             }
             return categorizer;
         } catch (ClassNotFoundException e) {
-            throw new IOException(e);
+            throw new IOException(e.getMessage());
         }
     }
 
