@@ -26,8 +26,8 @@
     <module>nuxeo-platform-categorization-language</module>
     <module>nuxeo-platform-categorization-subjects</module>
     <module>nuxeo-platform-categorization-coverage</module>
-    -->
     <module>nuxeo-platform-categorization-test</module>
+    -->
   </modules>
 
   <dependencyManagement>
