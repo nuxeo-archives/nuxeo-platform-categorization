@@ -31,7 +31,7 @@ public interface CategorizerFactory {
      *            learning mode
      * @throws IOException
      */
-    public Categorizer loadInstance(String modelFile, boolean readonly)
+    Categorizer loadInstance(String modelFile, boolean readonly)
             throws IOException;
 
 }
