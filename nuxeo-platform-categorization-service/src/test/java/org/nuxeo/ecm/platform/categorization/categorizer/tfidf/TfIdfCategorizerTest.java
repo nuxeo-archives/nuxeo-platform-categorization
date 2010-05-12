@@ -20,6 +20,7 @@ package org.nuxeo.ecm.platform.categorization.categorizer.tfidf;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -117,11 +118,11 @@ public class TfIdfCategorizerTest extends TestCase {
         assertEquals(0.94, sims.get("original"), 0.01);
     }
 
-    public void testSerialization() throws IOException, ClassNotFoundException {
+    public void testSerialization() throws Exception {
         ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
         categorizer.saveToStream(byteOutStream);
 
-        ByteArrayInputStream byteInStream = new ByteArrayInputStream(
+        InputStream byteInStream = new ByteArrayInputStream(
                 byteOutStream.toByteArray());
         TfIdfCategorizer copiedCategorizer = TfIdfCategorizer.load(byteInStream);
         Map<String, Float> sims = copiedCategorizer.getSimilarities("The dog barks"

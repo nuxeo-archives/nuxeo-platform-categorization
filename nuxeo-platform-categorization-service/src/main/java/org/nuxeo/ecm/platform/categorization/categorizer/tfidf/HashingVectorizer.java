@@ -22,11 +22,11 @@ import java.util.List;
 /**
  * Hashed vector representation of the token unigrams and bigrams of a document
  * provided as a sequence of tokens.
- *
+ * <p>
  * We use a hash representations to be able to maintain low memory requirements
  * by avoiding to store an explicit map from string bigrams to feature vector
  * index in memory.
- *
+ * <p>
  * http://hunch.net/~jl/projects/hash_reps/index.html
  * http://en.wikipedia.org/wiki/Bloom_filter#Counting_filters
  *

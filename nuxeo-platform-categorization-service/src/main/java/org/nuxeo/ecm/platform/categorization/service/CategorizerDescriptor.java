@@ -186,8 +186,6 @@ public class CategorizerDescriptor {
     /**
      * Chainable update the parameters of the current descriptor with the
      * non-null parameters of the other descriptor.
-     *
-     * @param other
      */
     public CategorizerDescriptor merge(CategorizerDescriptor other) {
         if (other != null) {

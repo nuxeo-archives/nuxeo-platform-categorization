@@ -196,7 +196,6 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
                 strings.add(string);
             } catch (Exception e) {
                 log.error(e.getMessage(), e);
-                continue;
             }
         }
         return StringUtils.join(strings, "\n");

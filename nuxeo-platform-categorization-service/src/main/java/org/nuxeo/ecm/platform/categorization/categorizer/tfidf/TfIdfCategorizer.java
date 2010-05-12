@@ -58,9 +58,9 @@ import org.nuxeo.ecm.platform.categorization.service.Categorizer;
  * Maintains a map of TF counts vectors in memory (just for a few reference
  * documents or topics) along with the common IDF estimate of all previously
  * seen text content.
- *
- * http://en.wikipedia.org/wiki/Tfidf
- *
+ * <p>
+ * See: http://en.wikipedia.org/wiki/Tfidf
+ * <p>
  * Classification is then achieved using the cosine similarity between the
  * TF-IDF of the document to classify and the registered topics.
  */
@@ -123,7 +123,7 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
      *
      * Updates won't be possible any more.
      */
-    synchronized public void disableUpdate() {
+    public synchronized void disableUpdate() {
         updateDisabled = true;
         // compute all the frequencies
         getIdf();
@@ -287,12 +287,11 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     /**
      * Utility method to initialize the parameters from a set of UTF-8 encoded
      * text files with names used as topic names.
-     *
+     * <p>
      * The content of the file to assumed to be lines of terms separated by
      * whitespaces without punctuation.
      *
      * @param folder
-     * @throws IOException
      */
     public void learnFiles(File folder) throws IOException {
         if (!folder.isDirectory()) {
@@ -334,7 +333,6 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
      * Save the model to a compressed binary format on the filesystem.
      *
      * @param file where to write the model
-     * @throws IOException
      */
     public void saveToFile(File file) throws IOException {
         FileOutputStream out = new FileOutputStream(file);
@@ -349,7 +347,6 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
      * Save a compressed binary representation of the trained model.
      *
      * @param out the output stream to write to
-     * @throws IOException
      */
     public void saveToStream(OutputStream out) throws IOException {
         if (updateDisabled) {
@@ -369,8 +366,6 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
      *
      * @param in the input stream to read from
      * @return a new instance with parameters coming from the saved version
-     * @throws IOException
-     * @throws ClassNotFoundException
      */
     public static TfIdfCategorizer load(InputStream in) throws IOException,
             ClassNotFoundException {
@@ -408,8 +403,6 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
      *
      * @param modelPath the path of the file model in the classloading path
      * @return a new instance with parameters coming from the saved version
-     * @throws IOException
-     * @throws ClassNotFoundException
      */
     public static TfIdfCategorizer load(String modelPath) throws IOException,
             ClassNotFoundException {
@@ -455,14 +448,14 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     }
 
     public List<String> guessCategories(String textContent, int maxSuggestions,
-            Double threshold) {
-        threshold = threshold == null ? ratioOverMedian : threshold;
+            Double precisionThreshold) {
+        precisionThreshold = precisionThreshold == null ? ratioOverMedian : precisionThreshold;
         Map<String, Float> sims = getSimilarities(tokenize(textContent));
         Float median = findMedian(sims);
         List<String> suggested = new ArrayList<String>();
         for (Map.Entry<String, Float> sim : sims.entrySet()) {
             double ratio = median != 0 ? sim.getValue() / median : 100;
-            if (suggested.size() >= maxSuggestions || ratio < threshold) {
+            if (suggested.size() >= maxSuggestions || ratio < precisionThreshold) {
                 break;
             }
             suggested.add(sim.getKey());

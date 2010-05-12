@@ -2,7 +2,7 @@ Nuxeo document categorization
 =============================
 
 Automated document categorization addon for the Nuxeo platform and derived
-applications. Categorization suggestions are based upon the textual content
+applications. Categorization suggestions are based upon the textual content.
 
 :author: Olivier Grisel <ogrisel@nuxeo.com>
 
@@ -34,7 +34,7 @@ Download the source::
   $ hg clone https://hg.nuxeo.org/addons/nuxeo-platform-categorization/nuxeo-platform-categorization-coverage
   $ hg clone https://hg.nuxeo.org/addons/nuxeo-platform-categorization/nuxeo-platform-categorization-language
 
-The models are hold in their own mercural repositories in subfolders so as to
+The models are hold in their own mercurial repositories in subfolders so as to
 avoid polluting the history of the service package with large blobs that can
 take a long time to download.
 

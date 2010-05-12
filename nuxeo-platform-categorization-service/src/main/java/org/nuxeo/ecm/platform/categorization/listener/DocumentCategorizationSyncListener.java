@@ -54,4 +54,5 @@ public class DocumentCategorizationSyncListener implements EventListener {
             throw new ClientException(e);
         }
     }
+
 }

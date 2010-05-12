@@ -21,8 +21,6 @@ import java.util.Arrays;
 
 import junit.framework.TestCase;
 
-import org.nuxeo.ecm.platform.categorization.categorizer.tfidf.HashingVectorizer;
-
 public class HashingVectorizerTest extends TestCase {
 
     protected HashingVectorizer hv_5_0_1;

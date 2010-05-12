@@ -48,7 +48,7 @@ import org.nuxeo.runtime.api.Framework;
 public class DocumentCategorizationAsyncListener implements
         PostCommitEventListener {
 
-    protected Log log = LogFactory.getLog(DocumentCategorizationAsyncListener.class);
+    protected static final Log log = LogFactory.getLog(DocumentCategorizationAsyncListener.class);
 
     protected static final String ALLREADY_CATEGORIZED_FLAG = DocumentCategorizationAsyncListener.class.getName();
 
@@ -102,4 +102,5 @@ public class DocumentCategorizationAsyncListener implements
             }
         }
     }
+
 }

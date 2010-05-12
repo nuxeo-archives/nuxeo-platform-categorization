@@ -40,11 +40,11 @@ public interface Categorizer {
      *
      * @param textContent
      * @param maxSuggestions
-     * @param precisionTreshold or null to use the default threshold of the
+     * @param precisionThreshold or null to use the default threshold of the
      *            implementation.
      * @return
      */
     List<String> guessCategories(String textContent, int maxSuggestions,
-            Double precisionTreshold);
+            Double precisionThreshold);
 
 }
