@@ -40,7 +40,7 @@ import org.nuxeo.ecm.platform.categorization.service.DocumentCategorizationServi
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Base default implementation of an aynchronous event listener that runs the
+ * Base default implementation of an asynchronous event listener that runs the
  * document categorization service.
  *
  * @author ogrisel@nuxeo.com
