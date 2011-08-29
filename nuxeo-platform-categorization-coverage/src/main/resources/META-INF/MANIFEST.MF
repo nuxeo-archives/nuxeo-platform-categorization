@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Nuxeo Platform Document Categorization: dc:coverage model
-Bundle-SymbolicName: org.nuxeo.ecm.platform.categorization.coverage
-Bundle-Localization: plugin
-Bundle-Vendor: Nuxeo
-Bundle-Category: runtime
-Require-Bundle: org.nuxeo.ecm.platform.categorization.service
-Nuxeo-Component: OSGI-INF/document-categorization-contrib.xml
