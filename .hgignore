@@ -1,9 +1,0 @@
-syntax:glob
-bin
-target
-.classpath
-.settings
-.project
-*.ipr
-*.iml
-*.iws
