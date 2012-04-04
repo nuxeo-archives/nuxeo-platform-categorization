@@ -21,6 +21,11 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.After;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.impl.blob.StreamingBlob;
@@ -44,7 +49,7 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
 
     DocumentModel note1;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
         super.setUp();
 
@@ -68,7 +73,7 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         assertNotNull(service);
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
         if (session != null) {
             closeSession();
@@ -137,6 +142,7 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         openSession();
     }
 
+    @Test
     public void testDefaultCategorizationUsingDefaultEventListener()
             throws Exception {
         // let us create some documents
@@ -169,6 +175,7 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         assertEquals(null, note1.getPropertyValue("dc:language"));
     }
 
+    @Test
     public void testDefaultCategorizationUsingServiceAPI() throws Exception {
         // disable the document categorization core event listener
         EventServiceAdmin eventServiceAdmin = Framework.getService(EventServiceAdmin.class);
@@ -201,6 +208,7 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         assertEquals(null, f2.getPropertyValue("dc:language"));
     }
 
+    @Test
     public void testDefaultCategorizationWithOverrides() throws Exception {
         // deploy the overrides
         deployContrib("org.nuxeo.ecm.platform.document.categorization.test",
