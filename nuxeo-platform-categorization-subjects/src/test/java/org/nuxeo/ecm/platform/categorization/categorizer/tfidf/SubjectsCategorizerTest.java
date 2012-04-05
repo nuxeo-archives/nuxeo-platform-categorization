@@ -19,12 +19,14 @@ package org.nuxeo.ecm.platform.categorization.categorizer.tfidf;
 import java.io.IOException;
 import java.util.List;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import org.nuxeo.ecm.platform.categorization.service.Categorizer;
 
-public class SubjectsCategorizerTest extends TestCase {
+public class SubjectsCategorizerTest {
 
+    @Test
     public void testPretrainedTopicsModel() throws IOException,
             ClassNotFoundException {
         TfIdfCategorizerFactory factory = new TfIdfCategorizerFactory();

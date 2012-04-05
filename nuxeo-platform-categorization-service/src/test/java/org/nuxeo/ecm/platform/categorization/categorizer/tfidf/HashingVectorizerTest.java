@@ -19,20 +19,23 @@ package org.nuxeo.ecm.platform.categorization.categorizer.tfidf;
 
 import java.util.Arrays;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class HashingVectorizerTest extends TestCase {
+public class HashingVectorizerTest {
 
     protected HashingVectorizer hv_5_0_1;
 
     protected HashingVectorizer hv_5_1_2;
 
-    @Override
+    @Before
     public void setUp() {
         hv_5_0_1 = new HashingVectorizer().dimension(5).window(0).probes(1);
         hv_5_1_2 = new HashingVectorizer().dimension(5).window(1).probes(2);
     }
 
+    @Test
     public void testSimpleHashing() {
         long[] counts = hv_5_0_1.count(Arrays.asList("term1"));
         assertTrue(Arrays.equals(new long[] { 0, 1, 0, 0, 0 }, counts));
@@ -45,6 +48,7 @@ public class HashingVectorizerTest extends TestCase {
         assertTrue(Arrays.equals(new long[] { 2, 1, 0, 0, 0 }, counts));
     }
 
+    @Test
     public void testWindowAndProbeHashing() {
         long[] counts = hv_5_1_2.count(Arrays.asList("term1"));
         assertTrue(Arrays.equals(new long[] { 0, 1, 1, 0, 0 }, counts));

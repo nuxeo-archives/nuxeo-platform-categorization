@@ -26,9 +26,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-public class TfIdfCategorizerTest extends TestCase {
+public class TfIdfCategorizerTest {
 
     protected TfIdfCategorizer categorizer;
 
@@ -44,7 +46,7 @@ public class TfIdfCategorizerTest extends TestCase {
 
     protected static final String doc6 = "This is THE original sentence.";
 
-    @Override
+    @Before
     public void setUp() {
         categorizer = new TfIdfCategorizer(65536);
         categorizer.getVectorizer().window(1);
@@ -56,6 +58,7 @@ public class TfIdfCategorizerTest extends TestCase {
         categorizer.update("original", doc6);
     }
 
+    @Test
     public void testMissingTopics() {
         TfIdfCategorizer empty = new TfIdfCategorizer(65536);
         Map<String, Float> sims = empty.getSimilarities(Arrays.asList("this",
@@ -70,17 +73,20 @@ public class TfIdfCategorizerTest extends TestCase {
         assertEquals(0, suggestions.size());
     }
 
+    @Test
     public void testEmptyQuery() {
         Map<String, Float> sims = categorizer.getSimilarities(new ArrayList<String>());
         assertEquals(0, sims.size());
     }
 
+    @Test
     public void testUnseenTerms() {
         Map<String, Float> sims = categorizer.getSimilarities(Arrays.asList(
                 "bidule", "machin", "chouette"));
         assertEquals(0, sims.size());
     }
 
+    @Test
     public void testCloseTopics() {
         String query = "The dog barks at the cat that sits on the mat.";
         Map<String, Float> sims = categorizer.getSimilarities(query);
@@ -100,6 +106,7 @@ public class TfIdfCategorizerTest extends TestCase {
         assertEquals("pets", suggestions.get(0));
     }
 
+    @Test
     public void testPerfectMatch() {
         String allThePets = doc1 + " " + doc2 + " " + doc3;
         Map<String, Float> sims = categorizer.getSimilarities(allThePets);
@@ -109,6 +116,7 @@ public class TfIdfCategorizerTest extends TestCase {
         assertEquals(0.00, sims.get("original"), 0.01);
     }
 
+    @Test
     public void testRarityMatch() {
         Map<String, Float> sims = categorizer.getSimilarities("This is as original as a "
                 + "very original sentence.");
@@ -118,6 +126,7 @@ public class TfIdfCategorizerTest extends TestCase {
         assertEquals(0.94, sims.get("original"), 0.01);
     }
 
+    @Test
     public void testSerialization() throws Exception {
         ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
         categorizer.saveToStream(byteOutStream);
