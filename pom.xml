@@ -16,10 +16,6 @@
   <description>Nuxeo Enterprise Platform: automated metadata suggestions
     based on global textual content of a document</description>
 
-  <properties>
-    <textcat.version>1.0.1</textcat.version>
-  </properties>
-
   <modules>
     <module>nuxeo-platform-categorization-service</module>
     <module>nuxeo-platform-categorization-language</module>
@@ -27,35 +23,5 @@
     <module>nuxeo-platform-categorization-coverage</module>
     <module>nuxeo-platform-categorization-test</module>
   </modules>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-platform-categorization-service</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-platform-categorization-language</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-platform-categorization-coverage</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.nuxeo.ecm.platform</groupId>
-        <artifactId>nuxeo-platform-categorization-subjects</artifactId>
-        <version>${nuxeo.features.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.knallgrau.utils</groupId>
-        <artifactId>textcat</artifactId>
-        <version>${textcat.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
 </project>
