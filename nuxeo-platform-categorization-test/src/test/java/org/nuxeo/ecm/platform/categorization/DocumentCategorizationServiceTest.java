@@ -184,6 +184,11 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
 
         // let us create some documents
         makeSomeDocuments();
+        f2 = session.getDocument(f2.getRef());
+        file1 = session.getDocument(file1.getRef());
+        file2 = session.getDocument(file2.getRef());
+        note1 = session.getDocument(note1.getRef());
+
         assertEquals(null, f2.getPropertyValue("dc:language"));
         assertEquals(null, file1.getPropertyValue("dc:language"));
         assertEquals(null, file1.getPropertyValue("dc:coverage"));
