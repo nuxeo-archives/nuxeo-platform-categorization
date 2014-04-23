@@ -29,7 +29,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,9 +48,10 @@ import java.util.zip.GZIPOutputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.Token;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.util.Version;
 import org.nuxeo.ecm.platform.categorization.service.Categorizer;
 
 /**
@@ -112,7 +112,7 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     public Analyzer getAnalyzer() {
         if (analyzer == null) {
             // TODO: make it possible to configure the stop words
-            analyzer = new StandardAnalyzer();
+            analyzer = new StandardAnalyzer(Version.LUCENE_47);
         }
         return analyzer;
     }
@@ -463,21 +463,22 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
         return suggested;
     }
 
-    @SuppressWarnings("deprecation")
     public List<String> tokenize(String textContent) {
-        List<String> terms = new ArrayList<String>();
-        TokenStream ts = getAnalyzer().tokenStream(null,
-                new StringReader(textContent));
-        Token token = new Token();
         try {
-            while (ts.next(token) != null) {
-                terms.add(token.termText());
+            List<String> terms = new ArrayList<String>();
+            TokenStream tokenStream = getAnalyzer().tokenStream(null,
+                    textContent);
+            CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+            tokenStream.reset();
+            while (tokenStream.incrementToken()) {
+                terms.add(charTermAttribute.toString());
             }
+            tokenStream.end();
+            tokenStream.close();
+            return terms;
         } catch (IOException e) {
-            // will never happen with a StringReader
             throw new IllegalStateException(e);
         }
-        return terms;
     }
 
     public static Map<String, Float> sortByDecreasingValue(
