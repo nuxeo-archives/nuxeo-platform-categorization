@@ -61,7 +61,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
     protected ConversionService conversionService;
 
     @Override
-    public void registerExtension(Extension extension) throws Exception {
+    public void registerExtension(Extension extension) {
         if (extension.getExtensionPoint().equals(CATEGORIZERS_XP_NAME)) {
             Object[] contribs = extension.getContributions();
             for (Object contrib : contribs) {
@@ -74,7 +74,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
     }
 
     @Override
-    public void unregisterExtension(Extension extension) throws Exception {
+    public void unregisterExtension(Extension extension) {
         if (extension.getExtensionPoint().equals(CATEGORIZERS_XP_NAME)) {
             Object[] contribs = extension.getContributions();
             for (Object contrib : contribs) {
@@ -87,9 +87,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
     }
 
     protected void registerCategorizerDescriptor(
-            CategorizerDescriptor descriptor, Extension extension)
-            throws InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IOException {
+            CategorizerDescriptor descriptor, Extension extension) {
 
         descriptor.initializeInContext(extension.getContext());
 
@@ -135,13 +133,12 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
     }
 
     public List<DocumentModel> updateCategories(CoreSession session,
-            List<DocumentRef> docRefs) throws Exception {
+            List<DocumentRef> docRefs) {
         DocumentModelList documents = session.getDocuments(docRefs.toArray(new DocumentRef[docRefs.size()]));
         return updateCategories(documents);
     }
 
-    public List<DocumentModel> updateCategories(List<DocumentModel> documents)
-            throws Exception {
+    public List<DocumentModel> updateCategories(List<DocumentModel> documents) {
 
         Set<DocumentModel> impactedDocs = new LinkedHashSet<DocumentModel>();
 
@@ -167,7 +164,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
         return new ArrayList<DocumentModel>(impactedDocs);
     }
 
-    public String extractTextContent(DocumentModel doc) throws Exception {
+    public String extractTextContent(DocumentModel doc) {
         List<String> strings = new LinkedList<String>();
 
         // text properties
@@ -216,7 +213,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
         return StringUtils.join(strings, "\n");
     }
 
-    protected ConversionService getConversionService() throws Exception {
+    protected ConversionService getConversionService() {
         if (conversionService == null) {
             conversionService = Framework.getService(ConversionService.class);
         }

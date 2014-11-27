@@ -16,14 +16,11 @@
  */
 package org.nuxeo.ecm.platform.categorization.categorizer;
 
-import java.io.IOException;
-
 import org.nuxeo.ecm.platform.categorization.service.CategorizerFactory;
 
 public class LanguageCategorizerFactory implements CategorizerFactory {
 
-    public LanguageCategorizer loadInstance(String modelFile, boolean readonly)
-            throws IOException {
+    public LanguageCategorizer loadInstance(String modelFile, boolean readonly) {
         return new LanguageCategorizer(modelFile);
     }
 

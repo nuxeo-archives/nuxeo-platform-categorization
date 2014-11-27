@@ -85,11 +85,13 @@ public class CategorizerDescriptor {
         return name;
     }
 
-    public void initializeInContext(RuntimeContext context)
-            throws InstantiationException, IllegalAccessException,
-            ClassNotFoundException, IOException {
+    public void initializeInContext(RuntimeContext context) {
         if (className != null) {
-            factory = (CategorizerFactory) context.loadClass(className).newInstance();
+            try {
+                factory = (CategorizerFactory) context.loadClass(className).newInstance();
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
         }
         // if className is null, this descriptor is probably an override
     }
@@ -99,7 +101,7 @@ public class CategorizerDescriptor {
     }
 
     public void processDocument(DocumentModel doc, String textContent)
-            throws PropertyException, ClientException, IOException {
+            throws PropertyException, ClientException {
         if (categorizer == null) {
             // lazy loading of the model in memory
             categorizer = factory.loadInstance(modelFile, true);

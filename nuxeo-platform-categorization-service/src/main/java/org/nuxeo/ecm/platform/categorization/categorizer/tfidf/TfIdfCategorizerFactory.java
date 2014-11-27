@@ -24,16 +24,15 @@ import org.nuxeo.ecm.platform.categorization.service.CategorizerFactory;
 
 public class TfIdfCategorizerFactory implements CategorizerFactory {
 
-    public Categorizer loadInstance(String modelFile, boolean readonly)
-            throws IOException {
+    public Categorizer loadInstance(String modelFile, boolean readonly) {
         try {
             TfIdfCategorizer categorizer = TfIdfCategorizer.load(modelFile);
             if (readonly) {
                 categorizer.disableUpdate();
             }
             return categorizer;
-        } catch (ClassNotFoundException e) {
-            throw new IOException(e.getMessage());
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

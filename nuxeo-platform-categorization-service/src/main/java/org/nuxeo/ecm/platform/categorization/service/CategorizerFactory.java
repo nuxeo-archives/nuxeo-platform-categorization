@@ -30,7 +30,6 @@ public interface CategorizerFactory {
      * @param readonly if true set the model in read only mode and disable the
      *            learning mode
      */
-    Categorizer loadInstance(String modelFile, boolean readonly)
-            throws IOException;
+    Categorizer loadInstance(String modelFile, boolean readonly);
 
 }
