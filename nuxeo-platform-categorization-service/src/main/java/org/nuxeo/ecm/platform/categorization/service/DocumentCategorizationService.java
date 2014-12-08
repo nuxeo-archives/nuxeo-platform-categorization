@@ -24,39 +24,32 @@ import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
 
 /**
- * Service to automatically suggests values for metadata category fields from
- * the text content of a document.
+ * Service to automatically suggests values for metadata category fields from the text content of a document.
  *
  * @author ogrisel
  */
 public interface DocumentCategorizationService {
 
     /**
-     * Run all registered document categorizers on the given documents fetched
-     * using the provided session.
-     *
-     * Note: the service does not save the documents. This responsibility is
-     * left to the caller.
+     * Run all registered document categorizers on the given documents fetched using the provided session. Note: the
+     * service does not save the documents. This responsibility is left to the caller.
      *
      * @param session the Core session used to fetch the document
      * @param docRefs the list of documents to process
      * @return the updated documents (unchanged documents are filtered out)
      * @throws Exception if there is a problem while extracting the text content
      */
-    List<DocumentModel> updateCategories(CoreSession session,
-            List<DocumentRef> docRefs) throws ClientException, Exception;
+    List<DocumentModel> updateCategories(CoreSession session, List<DocumentRef> docRefs) throws ClientException,
+            Exception;
 
     /**
-     * Run all registered document categorizers on the given documents.
-     *
-     * Note: the service does not save the documents. This responsibility is
-     * left to the caller.
+     * Run all registered document categorizers on the given documents. Note: the service does not save the documents.
+     * This responsibility is left to the caller.
      *
      * @param documents the list of documents to process
      * @return the updated documents (unchanged documents are filtered out)
      * @throws Exception if there is a problem while extracting the text content
      */
-    List<DocumentModel> updateCategories(List<DocumentModel> documents)
-            throws ClientException, Exception;
+    List<DocumentModel> updateCategories(List<DocumentModel> documents) throws ClientException, Exception;
 
 }

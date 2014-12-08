@@ -25,8 +25,7 @@ import org.knallgrau.utils.textcat.TextCategorizer;
 import org.nuxeo.ecm.platform.categorization.service.Categorizer;
 
 /**
- * Sample language guesser that straightforwardly use the pre-built models of
- * the TextCat library.
+ * Sample language guesser that straightforwardly use the pre-built models of the TextCat library.
  */
 public class LanguageCategorizer implements Categorizer {
 
@@ -47,8 +46,7 @@ public class LanguageCategorizer implements Categorizer {
         return Arrays.asList(languageGuesser.categorize(textContent));
     }
 
-    public List<String> guessCategories(String textContent, int maxSuggestions,
-            Double precisionTreshold) {
+    public List<String> guessCategories(String textContent, int maxSuggestions, Double precisionTreshold) {
         // languageGuesser does not support setting a custom threshold
         return guessCategories(textContent, maxSuggestions);
     }

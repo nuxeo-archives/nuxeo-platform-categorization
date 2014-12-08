@@ -43,8 +43,7 @@ import org.nuxeo.runtime.api.Framework;
 import org.nuxeo.runtime.model.DefaultComponent;
 import org.nuxeo.runtime.model.Extension;
 
-public class DocumentCategorizationServiceImpl extends DefaultComponent
-        implements DocumentCategorizationService {
+public class DocumentCategorizationServiceImpl extends DefaultComponent implements DocumentCategorizationService {
 
     public static final String CATEGORIZERS_XP_NAME = "categorizers";
 
@@ -66,8 +65,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
             Object[] contribs = extension.getContributions();
             for (Object contrib : contribs) {
                 if (contrib instanceof CategorizerDescriptor) {
-                    registerCategorizerDescriptor(
-                            (CategorizerDescriptor) contrib, extension);
+                    registerCategorizerDescriptor((CategorizerDescriptor) contrib, extension);
                 }
             }
         }
@@ -79,15 +77,13 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
             Object[] contribs = extension.getContributions();
             for (Object contrib : contribs) {
                 if (contrib instanceof CategorizerDescriptor) {
-                    unregisterCategorizerDescriptor(
-                            (CategorizerDescriptor) contrib, extension);
+                    unregisterCategorizerDescriptor((CategorizerDescriptor) contrib, extension);
                 }
             }
         }
     }
 
-    protected void registerCategorizerDescriptor(
-            CategorizerDescriptor descriptor, Extension extension) {
+    protected void registerCategorizerDescriptor(CategorizerDescriptor descriptor, Extension extension) {
 
         descriptor.initializeInContext(extension.getContext());
 
@@ -96,16 +92,14 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
         mergedCategorizers = null;
     }
 
-    protected synchronized void unregisterCategorizerDescriptor(
-            CategorizerDescriptor descriptor, Extension extension) {
+    protected synchronized void unregisterCategorizerDescriptor(CategorizerDescriptor descriptor, Extension extension) {
 
         int index = registeredCategorizers.lastIndexOf(descriptor);
         if (index != -1) {
             registeredCategorizers.remove(index);
             mergedCategorizers = null;
         } else {
-            log.warn(String.format("no registered Categorizer under name '%s'",
-                    descriptor.getName()));
+            log.warn(String.format("no registered Categorizer under name '%s'", descriptor.getName()));
         }
     }
 
@@ -132,8 +126,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
         return mergedCategorizers;
     }
 
-    public List<DocumentModel> updateCategories(CoreSession session,
-            List<DocumentRef> docRefs) {
+    public List<DocumentModel> updateCategories(CoreSession session, List<DocumentRef> docRefs) {
         DocumentModelList documents = session.getDocuments(docRefs.toArray(new DocumentRef[docRefs.size()]));
         return updateCategories(documents);
     }
@@ -169,8 +162,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
 
         // text properties
         strings.add(doc.getTitle());
-        String description = doc.getProperty("dc:description").getValue(
-                String.class);
+        String description = doc.getProperty("dc:description").getValue(String.class);
         if (description != null) {
             strings.add(description);
         }
@@ -191,8 +183,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent
         for (Blob blob : blobs) {
             try {
                 SimpleBlobHolder bh = new SimpleBlobHolder(blob);
-                BlobHolder result = conversionService.convert(ANY2TEXT, bh,
-                        null);
+                BlobHolder result = conversionService.convert(ANY2TEXT, bh, null);
                 if (result == null) {
                     continue;
                 }

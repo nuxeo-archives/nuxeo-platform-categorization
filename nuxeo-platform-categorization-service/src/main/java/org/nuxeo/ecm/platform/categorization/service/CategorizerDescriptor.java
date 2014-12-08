@@ -100,19 +100,15 @@ public class CategorizerDescriptor {
         return enabled;
     }
 
-    public void processDocument(DocumentModel doc, String textContent)
-            throws PropertyException, ClientException {
+    public void processDocument(DocumentModel doc, String textContent) throws PropertyException, ClientException {
         if (categorizer == null) {
             // lazy loading of the model in memory
             categorizer = factory.loadInstance(modelFile, true);
         }
 
-        List<String> suggestedCategories = categorizer.guessCategories(
-                textContent, maxSuggestions, precisionThreshold);
-        log.debug(String.format(
-                "Sugestions for document '%s' and property '%s'"
-                        + " with textcontent of length %d: [%s]",
-                doc.getTitle(), propertyXPath, textContent.length(),
+        List<String> suggestedCategories = categorizer.guessCategories(textContent, maxSuggestions, precisionThreshold);
+        log.debug(String.format("Sugestions for document '%s' and property '%s'"
+                + " with textcontent of length %d: [%s]", doc.getTitle(), propertyXPath, textContent.length(),
                 StringUtils.join(suggestedCategories, ", ")));
 
         List<String> propertyValues = new ArrayList<String>(maxSuggestions);
@@ -162,9 +158,8 @@ public class CategorizerDescriptor {
                 }
             } else if (property.isComplex()) {
                 // TODO: use a dedicated exception class instead
-                throw new ClientException(
-                        propertyXPath
-                                + " is a complex type field and hence is not suitable for text based categorization");
+                throw new ClientException(propertyXPath
+                        + " is a complex type field and hence is not suitable for text based categorization");
             } else if (property.getValue().toString().trim().length() == 0) {
                 return true;
             }
@@ -186,8 +181,7 @@ public class CategorizerDescriptor {
     }
 
     /**
-     * Chainable update the parameters of the current descriptor with the
-     * non-null parameters of the other descriptor.
+     * Chainable update the parameters of the current descriptor with the non-null parameters of the other descriptor.
      */
     public CategorizerDescriptor merge(CategorizerDescriptor other) {
         if (other != null) {

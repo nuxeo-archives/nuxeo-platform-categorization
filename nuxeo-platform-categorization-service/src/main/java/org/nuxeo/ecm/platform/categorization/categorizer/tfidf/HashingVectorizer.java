@@ -20,15 +20,12 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Hashed vector representation of the token unigrams and bigrams of a document
- * provided as a sequence of tokens.
+ * Hashed vector representation of the token unigrams and bigrams of a document provided as a sequence of tokens.
  * <p>
- * We use a hash representations to be able to maintain low memory requirements
- * by avoiding to store an explicit map from string bigrams to feature vector
- * index in memory.
+ * We use a hash representations to be able to maintain low memory requirements by avoiding to store an explicit map
+ * from string bigrams to feature vector index in memory.
  * <p>
- * http://hunch.net/~jl/projects/hash_reps/index.html
- * http://en.wikipedia.org/wiki/Bloom_filter#Counting_filters
+ * http://hunch.net/~jl/projects/hash_reps/index.html http://en.wikipedia.org/wiki/Bloom_filter#Counting_filters
  *
  * @author ogrisel
  */
@@ -43,9 +40,8 @@ public class HashingVectorizer implements Serializable {
     protected int window = 0;
 
     /**
-     * Chain configuration of the number of buckets, which is also the number of
-     * the vectors dimensions, small values mean high probabilities of
-     * collisions.
+     * Chain configuration of the number of buckets, which is also the number of the vectors dimensions, small values
+     * mean high probabilities of collisions.
      */
     public HashingVectorizer dimension(int dim) {
         this.dim = dim;
@@ -53,9 +49,8 @@ public class HashingVectorizer implements Serializable {
     }
 
     /**
-     * Chain configuration of the number of terms to hash together: window = 1
-     * means unigrams and bigrams, window = 3 would add bigrams of distance 2,
-     * and so on.
+     * Chain configuration of the number of terms to hash together: window = 1 means unigrams and bigrams, window = 3
+     * would add bigrams of distance 2, and so on.
      */
     public HashingVectorizer window(int window) {
         this.window = window;
@@ -63,8 +58,7 @@ public class HashingVectorizer implements Serializable {
     }
 
     /**
-     * Chain configuration of the number of probes, i.e. number of distinct hash
-     * functions to use for each ngram count.
+     * Chain configuration of the number of probes, i.e. number of distinct hash functions to use for each ngram count.
      */
     public HashingVectorizer probes(int probes) {
         this.probes = probes;

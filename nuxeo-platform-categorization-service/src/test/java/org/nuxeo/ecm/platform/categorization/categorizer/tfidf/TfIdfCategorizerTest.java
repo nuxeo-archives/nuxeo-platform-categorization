@@ -61,8 +61,7 @@ public class TfIdfCategorizerTest {
     @Test
     public void testMissingTopics() {
         TfIdfCategorizer empty = new TfIdfCategorizer(65536);
-        Map<String, Float> sims = empty.getSimilarities(Arrays.asList("this",
-                "is", "a", "query"));
+        Map<String, Float> sims = empty.getSimilarities(Arrays.asList("this", "is", "a", "query"));
         assertEquals(0, sims.size());
 
         String query = "This is a query.";
@@ -81,8 +80,7 @@ public class TfIdfCategorizerTest {
 
     @Test
     public void testUnseenTerms() {
-        Map<String, Float> sims = categorizer.getSimilarities(Arrays.asList(
-                "bidule", "machin", "chouette"));
+        Map<String, Float> sims = categorizer.getSimilarities(Arrays.asList("bidule", "machin", "chouette"));
         assertEquals(0, sims.size());
     }
 
@@ -118,8 +116,7 @@ public class TfIdfCategorizerTest {
 
     @Test
     public void testRarityMatch() {
-        Map<String, Float> sims = categorizer.getSimilarities("This is as original as a "
-                + "very original sentence.");
+        Map<String, Float> sims = categorizer.getSimilarities("This is as original as a " + "very original sentence.");
         assertEquals(3, sims.size());
         assertEquals(0.00, sims.get("pets"), 0.01);
         assertEquals(0.00, sims.get("monkeys"), 0.01);
@@ -131,8 +128,7 @@ public class TfIdfCategorizerTest {
         ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
         categorizer.saveToStream(byteOutStream);
 
-        InputStream byteInStream = new ByteArrayInputStream(
-                byteOutStream.toByteArray());
+        InputStream byteInStream = new ByteArrayInputStream(byteOutStream.toByteArray());
         TfIdfCategorizer copiedCategorizer = TfIdfCategorizer.load(byteInStream);
         Map<String, Float> sims = copiedCategorizer.getSimilarities("The dog barks"
                 + " at the cat that sits on the mat.");

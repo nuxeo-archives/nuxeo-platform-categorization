@@ -26,8 +26,8 @@ import java.util.List;
 public interface Categorizer {
 
     /**
-     * Compute a list of suggested categories, sorted by decreasing confidence
-     * based on the textual content of the document.
+     * Compute a list of suggested categories, sorted by decreasing confidence based on the textual content of the
+     * document.
      *
      * @param textContent
      * @param maxSuggestions
@@ -35,16 +35,14 @@ public interface Categorizer {
     List<String> guessCategories(String textContent, int maxSuggestions);
 
     /**
-     * Compute a list of suggested categories, sorted by decreasing confidence
-     * based on the textual content of the document.
+     * Compute a list of suggested categories, sorted by decreasing confidence based on the textual content of the
+     * document.
      *
      * @param textContent
      * @param maxSuggestions
-     * @param precisionThreshold or null to use the default threshold of the
-     *            implementation.
+     * @param precisionThreshold or null to use the default threshold of the implementation.
      * @return
      */
-    List<String> guessCategories(String textContent, int maxSuggestions,
-            Double precisionThreshold);
+    List<String> guessCategories(String textContent, int maxSuggestions, Double precisionThreshold);
 
 }

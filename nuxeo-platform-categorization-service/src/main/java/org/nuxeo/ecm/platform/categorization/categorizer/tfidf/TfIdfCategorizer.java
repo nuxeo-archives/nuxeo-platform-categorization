@@ -55,17 +55,15 @@ import org.apache.lucene.util.Version;
 import org.nuxeo.ecm.platform.categorization.service.Categorizer;
 
 /**
- * Maintains a map of TF counts vectors in memory (just for a few reference
- * documents or topics) along with the common IDF estimate of all previously
- * seen text content.
+ * Maintains a map of TF counts vectors in memory (just for a few reference documents or topics) along with the common
+ * IDF estimate of all previously seen text content.
  * <p>
  * See: http://en.wikipedia.org/wiki/Tfidf
  * <p>
- * Classification is then achieved using the cosine similarity between the
- * TF-IDF of the document to classify and the registered topics.
+ * Classification is then achieved using the cosine similarity between the TF-IDF of the document to classify and the
+ * registered topics.
  */
-public class TfIdfCategorizer extends PrimitiveVectorHelper implements
-        Categorizer, Serializable {
+public class TfIdfCategorizer extends PrimitiveVectorHelper implements Categorizer, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -118,10 +116,8 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     }
 
     /**
-     * Precompute all the TF-IDF vectors and unload the original count vectors
-     * to spare some memory.
-     *
-     * Updates won't be possible any more.
+     * Precompute all the TF-IDF vectors and unload the original count vectors to spare some memory. Updates won't be
+     * possible any more.
      */
     public synchronized void disableUpdate() {
         updateDisabled = true;
@@ -137,20 +133,16 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     }
 
     /**
-     * Update the model to take into account the statistical properties of a
-     * document that is known to be relevant to the given topic.
-     *
-     * Warning: this method is not thread safe: it should not be used
-     * concurrently with @see #getSimilarities(List)
+     * Update the model to take into account the statistical properties of a document that is known to be relevant to
+     * the given topic. Warning: this method is not thread safe: it should not be used concurrently with @see
+     * #getSimilarities(List)
      *
      * @param topicName the name of the document topic or category
-     * @param terms the list of document tokens (use a lucene analyzer to
-     *            extract theme for instance)
+     * @param terms the list of document tokens (use a lucene analyzer to extract theme for instance)
      */
     public void update(String topicName, List<String> terms) {
         if (updateDisabled) {
-            throw new IllegalStateException(
-                    "updates are no longer authorized once #disableUpdate has been called");
+            throw new IllegalStateException("updates are no longer authorized once #disableUpdate has been called");
         }
         long[] counts = vectorizer.count(terms);
         totalTermCount += sum(counts);
@@ -166,11 +158,9 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     }
 
     /**
-     * Update the model to take into account the statistical properties of a
-     * document that is known to be relevant to the given topic.
-     *
-     * Warning: this method is not thread safe: it should not be used
-     * concurrently with @see #getSimilarities(List)
+     * Update the model to take into account the statistical properties of a document that is known to be relevant to
+     * the given topic. Warning: this method is not thread safe: it should not be used concurrently with @see
+     * #getSimilarities(List)
      *
      * @param topicName the name of the document topic or category
      * @param textContent textual content to be tokenized and analyzed
@@ -192,13 +182,11 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     }
 
     /**
-     * For each registered topic, compute the cosine similarity of the TFIDF
-     * vector of the topic and the one of the document given by a list of
-     * tokens.
+     * For each registered topic, compute the cosine similarity of the TFIDF vector of the topic and the one of the
+     * document given by a list of tokens.
      *
      * @param terms a tokenized document.
-     * @return a map of topic names to float values from 0 to 1 sorted by
-     *         reverse value.
+     * @return a map of topic names to float values from 0 to 1 sorted by reverse value.
      */
     public Map<String, Float> getSimilarities(List<String> terms) {
         SortedMap<String, Float> similarities = new TreeMap<String, Float>();
@@ -221,12 +209,11 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     }
 
     /**
-     * For each registered topic, compute the cosine similarity of the TFIDF
-     * vector of the topic and the one of the document.
+     * For each registered topic, compute the cosine similarity of the TFIDF vector of the topic and the one of the
+     * document.
      *
      * @param the document to be tokenized and analyzed
-     * @return a map of topic names to float values from 0 to 1 sorted by
-     *         reverse value.
+     * @return a map of topic names to float values from 0 to 1 sorted by reverse value.
      */
     public Map<String, Float> getSimilarities(String allThePets) {
         return getSimilarities(tokenize(allThePets));
@@ -270,8 +257,7 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
                 if (allTermCounts[i] == 0) {
                     idf[i] = 0;
                 } else {
-                    idf[i] = (float) Math.log1p(((float) totalTermCount)
-                            / allTermCounts[i]);
+                    idf[i] = (float) Math.log1p(((float) totalTermCount) / allTermCounts[i]);
                 }
             }
             // atomic update to ensure thread-safeness
@@ -285,18 +271,16 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     }
 
     /**
-     * Utility method to initialize the parameters from a set of UTF-8 encoded
-     * text files with names used as topic names.
+     * Utility method to initialize the parameters from a set of UTF-8 encoded text files with names used as topic
+     * names.
      * <p>
-     * The content of the file to assumed to be lines of terms separated by
-     * whitespaces without punctuation.
+     * The content of the file to assumed to be lines of terms separated by whitespaces without punctuation.
      *
      * @param folder
      */
     public void learnFiles(File folder) throws IOException {
         if (!folder.isDirectory()) {
-            throw new IOException(String.format("%s is not a folder",
-                    folder.getAbsolutePath()));
+            throw new IOException(String.format("%s is not a folder", folder.getAbsolutePath()));
         }
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
@@ -306,12 +290,10 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
             if (topicName.contains(".")) {
                 topicName = topicName.substring(0, topicName.indexOf('.'));
             }
-            log.info(String.format("About to analyze file %s",
-                    file.getAbsolutePath()));
+            log.info(String.format("About to analyze file %s", file.getAbsolutePath()));
             FileInputStream is = new FileInputStream(file);
             try {
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(is, Charset.forName("UTF-8")));
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
                 String line = reader.readLine();
                 int i = 0;
                 while (line != null) {
@@ -319,8 +301,7 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
                     line = reader.readLine();
                     i++;
                     if (i % 10000 == 0) {
-                        log.info(String.format("Analyzed %d lines from '%s'",
-                                i, file.getAbsolutePath()));
+                        log.info(String.format("Analyzed %d lines from '%s'", i, file.getAbsolutePath()));
                     }
                 }
             } finally {
@@ -350,8 +331,7 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
      */
     public void saveToStream(OutputStream out) throws IOException {
         if (updateDisabled) {
-            throw new IllegalStateException(
-                    "model in disabled update mode cannot be saved");
+            throw new IllegalStateException("model in disabled update mode cannot be saved");
         }
         invalidateCache();
         GZIPOutputStream gzOut = new GZIPOutputStream(out);
@@ -361,21 +341,17 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     }
 
     /**
-     * Load a TfIdfCategorizer instance from it's compressed binary
-     * representation.
+     * Load a TfIdfCategorizer instance from it's compressed binary representation.
      *
      * @param in the input stream to read from
      * @return a new instance with parameters coming from the saved version
      */
-    public static TfIdfCategorizer load(InputStream in) throws IOException,
-            ClassNotFoundException {
+    public static TfIdfCategorizer load(InputStream in) throws IOException, ClassNotFoundException {
         GZIPInputStream gzIn = new GZIPInputStream(in);
         ObjectInputStream objIn = new ObjectInputStream(gzIn);
         TfIdfCategorizer cat = (TfIdfCategorizer) objIn.readObject();
-        log.info(String.format(
-                "Sucessfully loaded model with %d topics, dimension %d and density %f",
-                cat.getTopicNames().size(), cat.getDimension(),
-                cat.getDensity()));
+        log.info(String.format("Sucessfully loaded model with %d topics, dimension %d and density %f",
+                cat.getTopicNames().size(), cat.getDimension(), cat.getDensity()));
         return cat;
     }
 
@@ -397,24 +373,20 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     }
 
     /**
-     * Load a TfIdfCategorizer instance from it's compressed binary
-     * representation from a named resource in the classloading path of the
-     * current thread.
+     * Load a TfIdfCategorizer instance from it's compressed binary representation from a named resource in the
+     * classloading path of the current thread.
      *
      * @param modelPath the path of the file model in the classloading path
      * @return a new instance with parameters coming from the saved version
      */
-    public static TfIdfCategorizer load(String modelPath) throws IOException,
-            ClassNotFoundException {
+    public static TfIdfCategorizer load(String modelPath) throws IOException, ClassNotFoundException {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         return load(loader.getResourceAsStream(modelPath));
     }
 
-    public static void main(String[] args) throws FileNotFoundException,
-            IOException, ClassNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
         if (args.length < 2 || args.length > 3) {
-            System.out.println("Train a model:\n"
-                    + "First argument is the model filename (e.g. my-model.gz)\n"
+            System.out.println("Train a model:\n" + "First argument is the model filename (e.g. my-model.gz)\n"
                     + "Second argument is the path to a folder with UTF-8 text files\n"
                     + "Third optional argument is the dimension of the model");
             System.exit(0);
@@ -435,8 +407,7 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
             } else {
                 categorizer = new TfIdfCategorizer();
             }
-            log.info("Initializing new model with dimension: "
-                    + categorizer.getDimension());
+            log.info("Initializing new model with dimension: " + categorizer.getDimension());
         }
         categorizer.learnFiles(new File(args[1]));
         log.info("Saving trained model to: " + modelFile.getAbsolutePath());
@@ -447,8 +418,7 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
         return guessCategories(textContent, maxSuggestions, null);
     }
 
-    public List<String> guessCategories(String textContent, int maxSuggestions,
-            Double precisionThreshold) {
+    public List<String> guessCategories(String textContent, int maxSuggestions, Double precisionThreshold) {
         precisionThreshold = precisionThreshold == null ? ratioOverMedian : precisionThreshold;
         Map<String, Float> sims = getSimilarities(tokenize(textContent));
         Float median = findMedian(sims);
@@ -466,8 +436,7 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
     public List<String> tokenize(String textContent) {
         try {
             List<String> terms = new ArrayList<String>();
-            TokenStream tokenStream = getAnalyzer().tokenStream(null,
-                    textContent);
+            TokenStream tokenStream = getAnalyzer().tokenStream(null, textContent);
             CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
             tokenStream.reset();
             while (tokenStream.incrementToken()) {
@@ -481,13 +450,10 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements
         }
     }
 
-    public static Map<String, Float> sortByDecreasingValue(
-            Map<String, Float> map) {
-        List<Map.Entry<String, Float>> list = new LinkedList<Map.Entry<String, Float>>(
-                map.entrySet());
+    public static Map<String, Float> sortByDecreasingValue(Map<String, Float> map) {
+        List<Map.Entry<String, Float>> list = new LinkedList<Map.Entry<String, Float>>(map.entrySet());
         Collections.sort(list, new Comparator<Map.Entry<String, Float>>() {
-            public int compare(Map.Entry<String, Float> e1,
-                    Map.Entry<String, Float> e2) {
+            public int compare(Map.Entry<String, Float> e1, Map.Entry<String, Float> e2) {
                 return -e1.getValue().compareTo(e2.getValue());
             }
         });

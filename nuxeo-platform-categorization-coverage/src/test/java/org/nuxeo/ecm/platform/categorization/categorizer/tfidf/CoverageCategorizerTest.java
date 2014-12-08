@@ -28,11 +28,9 @@ import org.nuxeo.ecm.platform.categorization.service.Categorizer;
 public class CoverageCategorizerTest {
 
     @Test
-    public void testPretrainedCountryModel() throws IOException,
-            ClassNotFoundException {
+    public void testPretrainedCountryModel() throws IOException, ClassNotFoundException {
         TfIdfCategorizerFactory factory = new TfIdfCategorizerFactory();
-        Categorizer categorizer = factory.loadInstance(
-                "models/countries-30-tfidf-65536-model.gz", true);
+        Categorizer categorizer = factory.loadInstance("models/countries-30-tfidf-65536-model.gz", true);
 
         String query = "Berlin is a Bundesland";
         List<String> suggestions = categorizer.guessCategories(query, 3, 5.0);
@@ -45,8 +43,7 @@ public class CoverageCategorizerTest {
         assertEquals(1, suggestions.size());
         assertEquals("france", suggestions.get(0));
 
-        query = "The Terracotta Army are the Terra Cotta Warriors"
-                + " and Horses of Qin Shi Huang";
+        query = "The Terracotta Army are the Terra Cotta Warriors" + " and Horses of Qin Shi Huang";
         suggestions = categorizer.guessCategories(query, 3, 3.0);
         assertEquals(1, suggestions.size());
         assertEquals("china", suggestions.get(0));

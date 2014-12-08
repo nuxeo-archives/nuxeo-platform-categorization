@@ -18,17 +18,14 @@ package org.nuxeo.ecm.platform.categorization.service;
 
 import java.io.IOException;
 
-
 public interface CategorizerFactory {
 
     /**
-     * Factory method to build a categorizer instance from a model file
-     * typically holding data dependent parameters typically trained on a
-     * statistically representative text corpus.
+     * Factory method to build a categorizer instance from a model file typically holding data dependent parameters
+     * typically trained on a statistically representative text corpus.
      *
      * @param modelFile the model file to load
-     * @param readonly if true set the model in read only mode and disable the
-     *            learning mode
+     * @param readonly if true set the model in read only mode and disable the learning mode
      */
     Categorizer loadInstance(String modelFile, boolean readonly);
 

@@ -40,21 +40,18 @@ import org.nuxeo.ecm.platform.categorization.service.DocumentCategorizationServi
 import org.nuxeo.runtime.api.Framework;
 
 /**
- * Base default implementation of an asynchronous event listener that runs the
- * document categorization service.
+ * Base default implementation of an asynchronous event listener that runs the document categorization service.
  *
  * @author ogrisel@nuxeo.com
  */
-public class DocumentCategorizationAsyncListener implements
-        PostCommitEventListener {
+public class DocumentCategorizationAsyncListener implements PostCommitEventListener {
 
     protected static final Log log = LogFactory.getLog(DocumentCategorizationAsyncListener.class);
 
     protected static final String ALLREADY_CATEGORIZED_FLAG = DocumentCategorizationAsyncListener.class.getName();
 
     // to be overridden in derived classes
-    protected Set<String> eventNames = new HashSet<String>(Arrays.asList(
-            DocumentEventTypes.DOCUMENT_CREATED,
+    protected Set<String> eventNames = new HashSet<String>(Arrays.asList(DocumentEventTypes.DOCUMENT_CREATED,
             DocumentEventTypes.DOCUMENT_UPDATED));
 
     protected DocumentCategorizationService service;
@@ -62,8 +59,7 @@ public class DocumentCategorizationAsyncListener implements
     public void handleEvent(EventBundle events) throws ClientException {
         // collect ids of documents to analyze while filtering duplicated doc
         // ids
-        Set<DocumentModel> collectedDocuments = new LinkedHashSet<DocumentModel>(
-                events.size());
+        Set<DocumentModel> collectedDocuments = new LinkedHashSet<DocumentModel>(events.size());
         for (Event event : events) {
             if (!eventNames.contains(event.getName())) {
                 continue;
@@ -79,8 +75,7 @@ public class DocumentCategorizationAsyncListener implements
                 DocumentModel doc = docCtx.getSourceDocument();
                 if (doc != null) {
                     ScopedMap contextData = doc.getContextData();
-                    contextData.putScopedValue(ScopeType.REQUEST,
-                            ALLREADY_CATEGORIZED_FLAG, Boolean.TRUE);
+                    contextData.putScopedValue(ScopeType.REQUEST, ALLREADY_CATEGORIZED_FLAG, Boolean.TRUE);
                     collectedDocuments.add(doc);
                 }
             }
