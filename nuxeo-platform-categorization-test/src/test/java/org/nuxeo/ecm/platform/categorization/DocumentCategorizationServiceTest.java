@@ -17,18 +17,19 @@
 
 package org.nuxeo.ecm.platform.categorization;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.impl.blob.StreamingBlob;
+import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.storage.sql.SQLRepositoryTestCase;
@@ -97,13 +98,12 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         // create sub folder contents
         file1 = session.createDocumentModel(f1.getPathAsString(), "file-1", "File");
         file1.setPropertyValue("dc:title", "File 1: My trip to Asia");
-        Blob b1 = StreamingBlob.createFromString(
-                "Last month, I took the plane for a trip around Asia and visited Saigon, "
-                        + "Hanoi and several buddhist monasteries on the way. To move arounds"
-                        + " we mainly used the railroads and buses. Traveling by train"
-                        + " was an amazing experience. Unfortunately most hotels were"
-                        + " overcrowded with tourists and we had to go backpacking to find"
-                        + " quiet beaches away from the luxury resorts around Phu Quoc Island" + " and Nha Trang.",
+        Blob b1 = new StringBlob("Last month, I took the plane for a trip around Asia and visited Saigon, "
+                + "Hanoi and several buddhist monasteries on the way. To move arounds"
+                + " we mainly used the railroads and buses. Traveling by train"
+                + " was an amazing experience. Unfortunately most hotels were"
+                + " overcrowded with tourists and we had to go backpacking to find"
+                + " quiet beaches away from the luxury resorts around Phu Quoc Island" + " and Nha Trang.",
                 "text/plain");
         b1.setEncoding("UTF-8");
         b1.setFilename("file-1.txt");
@@ -112,7 +112,7 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
 
         file2 = session.createDocumentModel(f2.getPathAsString(), "file-2", "File");
         file2.setPropertyValue("dc:title", "Fichier 2");
-        Blob b2 = StreamingBlob.createFromString("Cette cha\u00EEne de charact\u00E8res est le contenu"
+        Blob b2 = new StringBlob("Cette cha\u00EEne de charact\u00E8res est le contenu"
                 + " du document qui a pour titre 'Fichier 2'", "text/plain");
         b2.setEncoding("UTF-8");
         b2.setFilename("file-2.txt");

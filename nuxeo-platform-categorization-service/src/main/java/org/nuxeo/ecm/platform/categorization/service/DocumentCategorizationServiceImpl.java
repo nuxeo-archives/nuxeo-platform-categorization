@@ -35,7 +35,7 @@ import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
-import org.nuxeo.ecm.core.api.impl.blob.StreamingBlob;
+import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.core.api.model.PropertyException;
 import org.nuxeo.ecm.core.convert.api.ConversionService;
 import org.nuxeo.ecm.core.utils.BlobsExtractor;
@@ -172,7 +172,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent implemen
         List<Blob> blobs = extractor.getBlobs(doc);
         try {
             String noteContent = (String) doc.getPropertyValue("note:note");
-            StreamingBlob noteBlob = StreamingBlob.createFromString(noteContent, "text/html");
+            Blob noteBlob = new StringBlob(noteContent, "text/html");
             blobs.add(noteBlob);
         } catch (PropertyException pe) {
             // not a note, ignore
