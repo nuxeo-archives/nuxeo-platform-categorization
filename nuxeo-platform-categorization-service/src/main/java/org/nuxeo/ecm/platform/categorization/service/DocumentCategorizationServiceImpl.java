@@ -16,7 +16,6 @@
  */
 package org.nuxeo.ecm.platform.categorization.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -29,13 +28,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.common.utils.StringUtils;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentModelList;
 import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
-import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.core.api.model.PropertyException;
 import org.nuxeo.ecm.core.convert.api.ConversionService;
 import org.nuxeo.ecm.core.utils.BlobsExtractor;
@@ -172,7 +171,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent implemen
         List<Blob> blobs = extractor.getBlobs(doc);
         try {
             String noteContent = (String) doc.getPropertyValue("note:note");
-            Blob noteBlob = new StringBlob(noteContent, "text/html");
+            Blob noteBlob = Blobs.createBlob(noteContent, "text/html");
             blobs.add(noteBlob);
         } catch (PropertyException pe) {
             // not a note, ignore

@@ -28,8 +28,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.nuxeo.ecm.core.api.Blob;
+import org.nuxeo.ecm.core.api.Blobs;
 import org.nuxeo.ecm.core.api.DocumentModel;
-import org.nuxeo.ecm.core.api.impl.blob.StringBlob;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.EventServiceAdmin;
 import org.nuxeo.ecm.core.storage.sql.SQLRepositoryTestCase;
@@ -98,23 +98,20 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         // create sub folder contents
         file1 = session.createDocumentModel(f1.getPathAsString(), "file-1", "File");
         file1.setPropertyValue("dc:title", "File 1: My trip to Asia");
-        Blob b1 = new StringBlob("Last month, I took the plane for a trip around Asia and visited Saigon, "
+        Blob b1 = Blobs.createBlob("Last month, I took the plane for a trip around Asia and visited Saigon, "
                 + "Hanoi and several buddhist monasteries on the way. To move arounds"
                 + " we mainly used the railroads and buses. Traveling by train"
                 + " was an amazing experience. Unfortunately most hotels were"
                 + " overcrowded with tourists and we had to go backpacking to find"
-                + " quiet beaches away from the luxury resorts around Phu Quoc Island" + " and Nha Trang.",
-                "text/plain");
-        b1.setEncoding("UTF-8");
+                + " quiet beaches away from the luxury resorts around Phu Quoc Island" + " and Nha Trang.");
         b1.setFilename("file-1.txt");
         file1.setPropertyValue("file:content", (Serializable) b1);
         file1 = session.createDocument(file1);
 
         file2 = session.createDocumentModel(f2.getPathAsString(), "file-2", "File");
         file2.setPropertyValue("dc:title", "Fichier 2");
-        Blob b2 = new StringBlob("Cette cha\u00EEne de charact\u00E8res est le contenu"
-                + " du document qui a pour titre 'Fichier 2'", "text/plain");
-        b2.setEncoding("UTF-8");
+        Blob b2 = Blobs.createBlob("Cette cha\u00EEne de charact\u00E8res est le contenu"
+                + " du document qui a pour titre 'Fichier 2'");
         b2.setFilename("file-2.txt");
         file2.setPropertyValue("file:content", (Serializable) b2);
         file2 = session.createDocument(file2);
