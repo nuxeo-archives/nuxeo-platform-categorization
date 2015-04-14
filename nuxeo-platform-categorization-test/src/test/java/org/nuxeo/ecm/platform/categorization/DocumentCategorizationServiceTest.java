@@ -18,26 +18,58 @@
 package org.nuxeo.ecm.platform.categorization;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import javax.inject.Inject;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.nuxeo.ecm.core.api.Blob;
 import org.nuxeo.ecm.core.api.Blobs;
+import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.EventService;
 import org.nuxeo.ecm.core.event.EventServiceAdmin;
-import org.nuxeo.ecm.core.storage.sql.SQLRepositoryTestCase;
+import org.nuxeo.ecm.core.test.CoreFeature;
+import org.nuxeo.ecm.core.test.TransactionalFeature;
+import org.nuxeo.ecm.core.test.annotations.Granularity;
+import org.nuxeo.ecm.core.test.annotations.RepositoryConfig;
 import org.nuxeo.ecm.platform.categorization.service.DocumentCategorizationService;
-import org.nuxeo.runtime.api.Framework;
+import org.nuxeo.runtime.test.runner.Deploy;
+import org.nuxeo.runtime.test.runner.Features;
+import org.nuxeo.runtime.test.runner.FeaturesRunner;
+import org.nuxeo.runtime.test.runner.RuntimeHarness;
+import org.nuxeo.runtime.transaction.TransactionHelper;
 
-public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
+@RunWith(FeaturesRunner.class)
+@Features({ TransactionalFeature.class, CoreFeature.class })
+@RepositoryConfig(cleanup = Granularity.METHOD)
+@Deploy({ "org.nuxeo.ecm.core.convert.api", //
+        "org.nuxeo.ecm.core.convert", //
+        "org.nuxeo.ecm.core.convert.plugins", //
+        "org.nuxeo.ecm.platform.categorization.service", //
+        "org.nuxeo.ecm.platform.categorization.language", //
+        "org.nuxeo.ecm.platform.categorization.coverage", //
+        "org.nuxeo.ecm.platform.categorization.subjects", //
+})
+public class DocumentCategorizationServiceTest {
 
+    @Inject
+    protected RuntimeHarness runtimeHarness;
+
+    @Inject
+    protected EventService eventService;
+
+    @Inject
+    protected EventServiceAdmin eventServiceAdmin;
+
+    @Inject
+    protected CoreSession session;
+
+    @Inject
     DocumentCategorizationService service;
 
     DocumentModel f1;
@@ -50,36 +82,12 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
 
     DocumentModel note1;
 
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
-
-        // force H2 access to avoid weird H2 driver error at tearDown time in
-        // tests that do not use the repository
-        openSession();
-
-        // need text extraction converters for blobs
-        deployBundle("org.nuxeo.ecm.core.convert.api");
-        deployBundle("org.nuxeo.ecm.core.convert");
-        deployBundle("org.nuxeo.ecm.core.convert.plugins");
-        deployBundle("org.nuxeo.ecm.core.storage.sql"); // event listener
-
-        // deploy the categorization framework and the default contribs
-        deployBundle("org.nuxeo.ecm.platform.categorization.service");
-        deployBundle("org.nuxeo.ecm.platform.categorization.language");
-        deployBundle("org.nuxeo.ecm.platform.categorization.coverage");
-        deployBundle("org.nuxeo.ecm.platform.categorization.subjects");
-
-        service = Framework.getService(DocumentCategorizationService.class);
-        assertNotNull(service);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (session != null) {
-            closeSession();
+    protected void waitForAsyncCompletion() {
+        if (TransactionHelper.isTransactionActiveOrMarkedRollback()) {
+            TransactionHelper.commitOrRollbackTransaction();
+            TransactionHelper.startTransaction();
         }
-        super.tearDown();
+        eventService.waitForAsyncCompletion();
     }
 
     public void makeSomeDocuments() throws Exception {
@@ -125,21 +133,17 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
         note1 = session.createDocument(note1);
 
         session.save();
-        closeSession();
-        openSession();
     }
 
     @Test
     public void testDefaultCategorizationUsingDefaultEventListener() throws Exception {
         // let us create some documents
         makeSomeDocuments();
-        closeSession();
 
         // wait for the default core event listener to finish
-        Framework.getLocalService(EventService.class).waitForAsyncCompletion();
+        waitForAsyncCompletion();
 
         // check the language categorization
-        openSession();
         f2 = session.getDocument(f2.getRef());
         // folderish documents are not processed by default
         assertEquals(null, f2.getPropertyValue("dc:language"));
@@ -163,69 +167,69 @@ public class DocumentCategorizationServiceTest extends SQLRepositoryTestCase {
     @Test
     public void testDefaultCategorizationUsingServiceAPI() throws Exception {
         // disable the document categorization core event listener
-        EventServiceAdmin eventServiceAdmin = Framework.getService(EventServiceAdmin.class);
         eventServiceAdmin.setListenerEnabledFlag("documentCategorizationSyncListener", false);
+        try {
+            // let us create some documents
+            makeSomeDocuments();
+            f2 = session.getDocument(f2.getRef());
+            file1 = session.getDocument(file1.getRef());
+            file2 = session.getDocument(file2.getRef());
+            note1 = session.getDocument(note1.getRef());
 
-        // let us create some documents
-        makeSomeDocuments();
-        f2 = session.getDocument(f2.getRef());
-        file1 = session.getDocument(file1.getRef());
-        file2 = session.getDocument(file2.getRef());
-        note1 = session.getDocument(note1.getRef());
+            assertEquals(null, f2.getPropertyValue("dc:language"));
+            assertEquals(null, file1.getPropertyValue("dc:language"));
+            assertEquals(null, file1.getPropertyValue("dc:coverage"));
+            assertEquals(null, file2.getPropertyValue("dc:language"));
+            assertEquals(null, note1.getPropertyValue("dc:language"));
 
-        assertEquals(null, f2.getPropertyValue("dc:language"));
-        assertEquals(null, file1.getPropertyValue("dc:language"));
-        assertEquals(null, file1.getPropertyValue("dc:coverage"));
-        assertEquals(null, file2.getPropertyValue("dc:language"));
-        assertEquals(null, note1.getPropertyValue("dc:language"));
+            // run the engine again, this time all the documents should be processed
+            List<DocumentModel> updatedDocuments = service.updateCategories(Arrays.asList(file1, file2, note1, f2));
+            assertEquals(3, updatedDocuments.size());
 
-        // run the engine again, this time all the documents should be processed
-        List<DocumentModel> updatedDocuments = service.updateCategories(Arrays.asList(file1, file2, note1, f2));
-        assertEquals(3, updatedDocuments.size());
+            assertEquals("en", file1.getPropertyValue("dc:language"));
+            assertEquals("asia/Viet_Nam", file1.getPropertyValue("dc:coverage"));
 
-        assertEquals("en", file1.getPropertyValue("dc:language"));
-        assertEquals("asia/Viet_Nam", file1.getPropertyValue("dc:coverage"));
+            assertEquals("fr", file2.getPropertyValue("dc:language"));
+            assertEquals("europe/France", file2.getPropertyValue("dc:coverage"));
 
-        assertEquals("fr", file2.getPropertyValue("dc:language"));
-        assertEquals("europe/France", file2.getPropertyValue("dc:coverage"));
+            // TODO: handle the string content of Note document too
+            assertEquals(null, note1.getPropertyValue("dc:language"));
 
-        // TODO: handle the string content of Note document too
-        assertEquals(null, note1.getPropertyValue("dc:language"));
-
-        // folderish documents are ignored by the categorizers
-        assertEquals(null, f2.getPropertyValue("dc:language"));
+            // folderish documents are ignored by the categorizers
+            assertEquals(null, f2.getPropertyValue("dc:language"));
+        } finally {
+            eventServiceAdmin.setListenerEnabledFlag("documentCategorizationSyncListener", true);
+        }
     }
 
     @Test
     public void testDefaultCategorizationWithOverrides() throws Exception {
         // deploy the overrides
-        deployContrib("org.nuxeo.ecm.platform.document.categorization.test",
+        runtimeHarness.deployContrib("org.nuxeo.ecm.platform.document.categorization.test",
                 "OSGI-INF/document-categorization-test-contrib.xml");
+        try {
+            // let us create some documents
+            makeSomeDocuments();
 
-        // let us create some documents
-        makeSomeDocuments();
-        closeSession();
+            // wait for the default core event listener to finish
+            waitForAsyncCompletion();
 
-        // wait for the default core event listener to finish
-        Framework.getLocalService(EventService.class).waitForAsyncCompletion();
+            // check the language categorization
+            file1 = session.getDocument(file1.getRef());
+            file2 = session.getDocument(file2.getRef());
 
-        // check the language categorization
-        openSession();
+            assertEquals("en", file1.getPropertyValue("dc:rights"));
+            assertEquals(null, file1.getPropertyValue("dc:language"));
+            assertEquals("asia/Viet_Nam", file1.getPropertyValue("dc:coverage"));
 
-        file1 = session.getDocument(file1.getRef());
-        file2 = session.getDocument(file2.getRef());
-
-        assertEquals("en", file1.getPropertyValue("dc:rights"));
-        assertEquals(null, file1.getPropertyValue("dc:language"));
-        assertEquals("asia/Viet_Nam", file1.getPropertyValue("dc:coverage"));
-
-        assertEquals("fr", file2.getPropertyValue("dc:rights"));
-        assertEquals(null, file2.getPropertyValue("dc:language"));
-        assertEquals("europe/France", file2.getPropertyValue("dc:coverage"));
-
-        // undeploy the override
-        undeployContrib("org.nuxeo.ecm.platform.document.categorization.test",
-                "OSGI-INF/document-categorization-test-contrib.xml");
+            assertEquals("fr", file2.getPropertyValue("dc:rights"));
+            assertEquals(null, file2.getPropertyValue("dc:language"));
+            assertEquals("europe/France", file2.getPropertyValue("dc:coverage"));
+        } finally {
+            // undeploy the override
+            runtimeHarness.undeployContrib("org.nuxeo.ecm.platform.document.categorization.test",
+                    "OSGI-INF/document-categorization-test-contrib.xml");
+        }
 
         // trigger a modified document event
         file1.setPropertyValue("dc:title", "New title for File 1");
