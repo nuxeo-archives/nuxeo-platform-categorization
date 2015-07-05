@@ -38,7 +38,7 @@ public class DocumentCategorizationSyncListener implements EventListener {
 
     public static final Log log = LogFactory.getLog(DocumentCategorizationSyncListener.class);
 
-    public void handleEvent(Event event) throws ClientException {
+    public void handleEvent(Event event) {
         EventContext ctx = event.getContext();
         if (!(ctx instanceof DocumentEventContext)) {
             return;

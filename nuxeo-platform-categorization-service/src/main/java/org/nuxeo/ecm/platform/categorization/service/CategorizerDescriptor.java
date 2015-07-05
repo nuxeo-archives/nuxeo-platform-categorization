@@ -100,7 +100,7 @@ public class CategorizerDescriptor {
         return enabled;
     }
 
-    public void processDocument(DocumentModel doc, String textContent) throws PropertyException, ClientException {
+    public void processDocument(DocumentModel doc, String textContent) throws PropertyException {
         if (categorizer == null) {
             // lazy loading of the model in memory
             categorizer = factory.loadInstance(modelFile, true);
@@ -137,7 +137,7 @@ public class CategorizerDescriptor {
     }
 
     @SuppressWarnings("unchecked")
-    public boolean shouldProcess(DocumentModel doc) throws ClientException {
+    public boolean shouldProcess(DocumentModel doc) {
         if (skipFacets != null) {
             for (String facetToSkip : skipFacets) {
                 if (doc.hasFacet(facetToSkip)) {

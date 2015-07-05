@@ -56,7 +56,7 @@ public class DocumentCategorizationAsyncListener implements PostCommitEventListe
 
     protected DocumentCategorizationService service;
 
-    public void handleEvent(EventBundle events) throws ClientException {
+    public void handleEvent(EventBundle events) {
         // collect ids of documents to analyze while filtering duplicated doc
         // ids
         Set<DocumentModel> collectedDocuments = new LinkedHashSet<DocumentModel>(events.size());
