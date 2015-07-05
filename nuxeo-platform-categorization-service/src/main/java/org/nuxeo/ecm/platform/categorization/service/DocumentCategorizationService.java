@@ -39,7 +39,7 @@ public interface DocumentCategorizationService {
      * @return the updated documents (unchanged documents are filtered out)
      * @throws Exception if there is a problem while extracting the text content
      */
-    List<DocumentModel> updateCategories(CoreSession session, List<DocumentRef> docRefs) throws ClientException,
+    List<DocumentModel> updateCategories(CoreSession session, List<DocumentRef> docRefs) throws
             Exception;
 
     /**
@@ -50,6 +50,6 @@ public interface DocumentCategorizationService {
      * @return the updated documents (unchanged documents are filtered out)
      * @throws Exception if there is a problem while extracting the text content
      */
-    List<DocumentModel> updateCategories(List<DocumentModel> documents) throws ClientException, Exception;
+    List<DocumentModel> updateCategories(List<DocumentModel> documents) throws Exception;
 
 }
