@@ -30,8 +30,8 @@ import org.nuxeo.common.xmap.annotation.XNode;
 import org.nuxeo.common.xmap.annotation.XNodeList;
 import org.nuxeo.common.xmap.annotation.XNodeMap;
 import org.nuxeo.common.xmap.annotation.XObject;
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
+import org.nuxeo.ecm.core.api.NuxeoException;
 import org.nuxeo.ecm.core.api.model.Property;
 import org.nuxeo.ecm.core.api.model.PropertyException;
 import org.nuxeo.runtime.model.RuntimeContext;
@@ -158,7 +158,7 @@ public class CategorizerDescriptor {
                 }
             } else if (property.isComplex()) {
                 // TODO: use a dedicated exception class instead
-                throw new ClientException(propertyXPath
+                throw new NuxeoException(propertyXPath
                         + " is a complex type field and hence is not suitable for text based categorization");
             } else if (property.getValue().toString().trim().length() == 0) {
                 return true;

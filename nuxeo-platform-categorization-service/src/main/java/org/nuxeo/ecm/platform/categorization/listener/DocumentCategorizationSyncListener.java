@@ -20,7 +20,6 @@ import java.util.Arrays;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.event.Event;
 import org.nuxeo.ecm.core.event.EventContext;
@@ -45,13 +44,8 @@ public class DocumentCategorizationSyncListener implements EventListener {
         }
         DocumentEventContext docCtx = (DocumentEventContext) ctx;
         DocumentModel doc = docCtx.getSourceDocument();
-
-        try {
-            DocumentCategorizationService categorizationService = Framework.getService(DocumentCategorizationService.class);
-            categorizationService.updateCategories(Arrays.asList(doc));
-        } catch (Exception e) {
-            throw new ClientException(e);
-        }
+        DocumentCategorizationService categorizationService = Framework.getService(DocumentCategorizationService.class);
+        categorizationService.updateCategories(Arrays.asList(doc));
     }
 
 }

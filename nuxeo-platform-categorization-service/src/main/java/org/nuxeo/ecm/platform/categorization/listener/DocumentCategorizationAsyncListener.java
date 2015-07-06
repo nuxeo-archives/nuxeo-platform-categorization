@@ -27,7 +27,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.nuxeo.common.collections.ScopeType;
 import org.nuxeo.common.collections.ScopedMap;
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.event.DocumentEventTypes;
@@ -84,16 +83,13 @@ public class DocumentCategorizationAsyncListener implements PostCommitEventListe
             // assume all document stem from the same repo, with the
             // save session
             CoreSession session = collectedDocuments.iterator().next().getCoreSession();
-            try {
-                DocumentCategorizationService categorizationService = Framework.getService(DocumentCategorizationService.class);
-                List<DocumentModel> documents = categorizationService.updateCategories(new ArrayList<DocumentModel>(
-                        collectedDocuments));
-                if (!documents.isEmpty()) {
-                    session.saveDocuments(documents.toArray(new DocumentModel[documents.size()]));
-                    session.save();
-                }
-            } catch (Exception e) {
-                throw new ClientException(e);
+            DocumentCategorizationService categorizationService = Framework.getService(
+                    DocumentCategorizationService.class);
+            List<DocumentModel> documents = categorizationService.updateCategories(
+                    new ArrayList<DocumentModel>(collectedDocuments));
+            if (!documents.isEmpty()) {
+                session.saveDocuments(documents.toArray(new DocumentModel[documents.size()]));
+                session.save();
             }
         }
     }

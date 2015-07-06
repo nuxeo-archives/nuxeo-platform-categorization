@@ -18,7 +18,6 @@ package org.nuxeo.ecm.platform.categorization.service;
 
 import java.util.List;
 
-import org.nuxeo.ecm.core.api.ClientException;
 import org.nuxeo.ecm.core.api.CoreSession;
 import org.nuxeo.ecm.core.api.DocumentModel;
 import org.nuxeo.ecm.core.api.DocumentRef;
@@ -37,10 +36,8 @@ public interface DocumentCategorizationService {
      * @param session the Core session used to fetch the document
      * @param docRefs the list of documents to process
      * @return the updated documents (unchanged documents are filtered out)
-     * @throws Exception if there is a problem while extracting the text content
      */
-    List<DocumentModel> updateCategories(CoreSession session, List<DocumentRef> docRefs) throws
-            Exception;
+    List<DocumentModel> updateCategories(CoreSession session, List<DocumentRef> docRefs);
 
     /**
      * Run all registered document categorizers on the given documents. Note: the service does not save the documents.
@@ -48,8 +45,7 @@ public interface DocumentCategorizationService {
      *
      * @param documents the list of documents to process
      * @return the updated documents (unchanged documents are filtered out)
-     * @throws Exception if there is a problem while extracting the text content
      */
-    List<DocumentModel> updateCategories(List<DocumentModel> documents) throws Exception;
+    List<DocumentModel> updateCategories(List<DocumentModel> documents);
 
 }
