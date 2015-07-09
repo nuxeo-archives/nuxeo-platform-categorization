@@ -16,6 +16,7 @@
  */
 package org.nuxeo.ecm.platform.categorization.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -36,6 +37,7 @@ import org.nuxeo.ecm.core.api.DocumentRef;
 import org.nuxeo.ecm.core.api.blobholder.BlobHolder;
 import org.nuxeo.ecm.core.api.blobholder.SimpleBlobHolder;
 import org.nuxeo.ecm.core.api.model.PropertyException;
+import org.nuxeo.ecm.core.convert.api.ConversionException;
 import org.nuxeo.ecm.core.convert.api.ConversionService;
 import org.nuxeo.ecm.core.utils.BlobsExtractor;
 import org.nuxeo.runtime.api.Framework;
@@ -196,7 +198,7 @@ public class DocumentCategorizationServiceImpl extends DefaultComponent implemen
                     string = string.replace("\0", " ");
                 }
                 strings.add(string);
-            } catch (Exception e) {
+            } catch (ConversionException | IOException e) {
                 log.error(e.getMessage(), e);
             }
         }
