@@ -51,7 +51,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-import org.apache.lucene.util.Version;
 import org.nuxeo.ecm.platform.categorization.service.Categorizer;
 
 /**
@@ -110,7 +109,7 @@ public class TfIdfCategorizer extends PrimitiveVectorHelper implements Categoriz
     public Analyzer getAnalyzer() {
         if (analyzer == null) {
             // TODO: make it possible to configure the stop words
-            analyzer = new StandardAnalyzer(Version.LUCENE_47);
+            analyzer = new StandardAnalyzer();
         }
         return analyzer;
     }
