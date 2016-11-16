@@ -1,0 +1,2 @@
+
+The `nuxeo-platform-categorization` addon has been deprecated and removed since 8.10.
